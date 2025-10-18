@@ -21,6 +21,7 @@ stages:
   model_building:
     cmd: uv run src/model/model_building.py
     deps:
+    - src/data/data_preprocessing.py
     - data/interim/train_processed.csv
     - src/model/model_building.py
     params:
@@ -36,6 +37,7 @@ stages:
   model_evaluation:
     cmd: uv run src/model/model_evaluation.py
     deps:
+    - src/model/model_building.py
     - data/interim/test_processed.csv
     - lgbm_model.pkl
     - tfidf_vectorizer.pkl
