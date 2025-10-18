@@ -15,7 +15,8 @@ dependencies = [
     "pandas",
     "pyyaml",
     "numpy",
-    "nltk"
+    "nltk",
+    "lightgbm"
 ]
 
 [tool.setuptools.packages.find]
