@@ -6,6 +6,7 @@ import yaml
 import logging
 import lightgbm as lgb
 from sklearn.feature_extraction.text import TfidfVectorizer
+from src.utils.utils import setup_logger
 
 # logging configuration
 logger = logging.getLogger(__name__)
@@ -110,6 +111,8 @@ def get_root_directory() -> str:
 
 def main():
     try:
+
+        setup_logger()
         # Get root directory and resolve the path for params.yaml
         root_dir = get_root_directory()
 
