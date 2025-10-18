@@ -51,17 +51,16 @@ def preprocess_comment(comment):
 
 
 # Load the model and vectorizer from the model registry and local storage
-def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
-    # Set MLflow tracking URI to your server
-    TRACKING_URI = "http://3.19.222.199:5000/"
-    mlflow.set_tracking_uri(TRACKING_URI)
-    client = MlflowClient()
-    model_uri = f"models:/{model_name}/{model_version}"
-    model = mlflow.pyfunc.load_model(model_uri)
-    with open(vectorizer_path, 'rb') as file:
-        vectorizer = pickle.load(file)
+# def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
+#     # Set MLflow tracking URI to your server
+#     mlflow.set_tracking_uri("http://ec2-54-167-108-249.compute-1.amazonaws.com:5000/")  # Replace with your MLflow tracking URI
+#     client = MlflowClient()
+#     model_uri = f"models:/{model_name}/{model_version}"
+#     model = mlflow.pyfunc.load_model(model_uri)
+#     with open(vectorizer_path, 'rb') as file:
+#         vectorizer = pickle.load(file)
    
-    return model, vectorizer
+#     return model, vectorizer
 
 
 
@@ -80,15 +79,14 @@ def load_model(model_path, vectorizer_path):
 
 
 # Initialize the model and vectorizer
-# model, vectorizer = load_model("./lgbm_model.pkl", "./tfidf_vectorizer.pkl")  
+model, vectorizer = load_model("./lgbm_model.pkl", "./tfidf_vectorizer.pkl")  
 
 # Initialize the model and vectorizer
-model, vectorizer = load_model_and_vectorizer("yt_chrome_plugin_model", "3", "./tfidf_vectorizer.pkl")  
+# model, vectorizer = load_model_and_vectorizer("my_model", "1", "./tfidf_vectorizer.pkl")  # Update paths and versions as needed
 
 @app.route('/')
 def home():
     return "Welcome to our flask api"
-
 
 
 @app.route('/predict', methods=['POST'])
@@ -109,29 +107,19 @@ def predict():
         transformed_comments = vectorizer.transform(preprocessed_comments)
 
         # Convert the sparse matrix to dense format
-        # dense_comments = transformed_comments.toarray()  # Convert to dense array
+        dense_comments = transformed_comments.toarray()  # Convert to dense array
         
-        # Get feature names from vectorizer
-        feature_names = vectorizer.get_feature_names_out()
-
-        # Convert to DataFrame for MLflow model
-        input_df = pd.DataFrame(transformed_comments.toarray(), columns=feature_names)
-
         # Make predictions
-        predictions = model.predict(input_df).tolist()
-
-                # Make predictions
-        # predictions = model.predict(dense_comments).tolist()  # Convert to list
+        predictions = model.predict(dense_comments).tolist()  # Convert to list
         
         # Convert predictions to strings for consistency
-        # predictions = [str(pred) for pred in predictions]
+        predictions = [str(pred) for pred in predictions]
     except Exception as e:
-        return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
+        return jsonify({"error": f"Prediction failed: {e}"}), 500
     
     # Return the response with original comments and predicted sentiments
     response = [{"comment": comment, "sentiment": sentiment} for comment, sentiment in zip(comments, predictions)]
     return jsonify(response)
-
 
 
 
