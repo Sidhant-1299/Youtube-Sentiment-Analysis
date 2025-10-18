@@ -38,7 +38,6 @@ stages:
     cmd: uv run src/model/model_evaluation.py
     deps:
     - src/model/model_building.py
-    - data/interim/test_processed.csv
     - lgbm_model.pkl
     - tfidf_vectorizer.pkl
     outs:

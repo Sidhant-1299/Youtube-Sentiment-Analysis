@@ -4,13 +4,8 @@ from sklearn.model_selection import train_test_split
 import yaml
 import logging
 import os
+from src.utils.utils import setup_logger
 
-logging.basicConfig(
-    encoding='utf-8',
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S',
-    format='%(levelname)s\t%(asctime)s\t%(name)s\t%(message)s\t%(funcName)s'
-)
 
 logger = logging.getLogger(__name__)
 def load_params(params_path: str) -> dict:
@@ -102,4 +97,5 @@ def main():
         print(f"Error: {e}")
 
 if __name__ == '__main__':
+    setup_logger()
     main()
