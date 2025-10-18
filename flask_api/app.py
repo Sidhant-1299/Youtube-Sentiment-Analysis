@@ -51,16 +51,26 @@ def preprocess_comment(comment):
 
 
 # Load the model and vectorizer from the model registry and local storage
-# def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
-#     # Set MLflow tracking URI to your server
-#     mlflow.set_tracking_uri("http://ec2-54-167-108-249.compute-1.amazonaws.com:5000/")  # Replace with your MLflow tracking URI
-#     client = MlflowClient()
-#     model_uri = f"models:/{model_name}/{model_version}"
-#     model = mlflow.pyfunc.load_model(model_uri)
-#     with open(vectorizer_path, 'rb') as file:
-#         vectorizer = pickle.load(file)
+def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
+    # Set MLflow tracking URI to your server
+    TRACKING_URI = "http://3.19.222.199:5000/"
+    mlflow.set_tracking_uri(TRACKING_URI)
+    client = MlflowClient()
+    model_uri = f"models:/{model_name}/{model_version}"
+    model = mlflow.pyfunc.load_model(model_uri).get_raw_model()
+
+    #get run_id for the vectorizer artifact
+    model_info = client.get_registered_model(model_name)
+    run_id = model_info.latest_versions[-1].run_id
+
+    vectorizer_pkl = mlflow.artifacts.download_artifacts(
+        run_id= run_id,
+        artifact_path=vectorizer_path
+    )
+    with open(vectorizer_pkl, "rb") as f:
+        vectorizer = pickle.load(f)
    
-#     return model, vectorizer
+    return model, vectorizer
 
 
 
@@ -79,10 +89,10 @@ def load_model(model_path, vectorizer_path):
 
 
 # Initialize the model and vectorizer
-model, vectorizer = load_model("./lgbm_model.pkl", "./tfidf_vectorizer.pkl")  
+# model, vectorizer = load_model("./lgbm_model.pkl", "./tfidf_vectorizer.pkl")  
 
 # Initialize the model and vectorizer
-# model, vectorizer = load_model_and_vectorizer("my_model", "1", "./tfidf_vectorizer.pkl")  # Update paths and versions as needed
+model, vectorizer = load_model_and_vectorizer("yt_chrome_plugin_model", "3", "tfidf_vectorizer.pkl")  # Update paths and versions as needed
 
 @app.route('/')
 def home():
