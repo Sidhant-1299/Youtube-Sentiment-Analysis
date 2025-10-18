@@ -21,6 +21,8 @@ dependencies = [
     "seaborn",
     "boto3",
     "awscli",
+    "flask",
+    "wordcloud",
 ]
 
 [tool.setuptools.packages.find]
