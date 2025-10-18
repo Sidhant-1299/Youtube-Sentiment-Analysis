@@ -32,3 +32,12 @@ stages:
     outs:
     - lgbm_model.pkl
     - tfidf_vectorizer.pkl
+
+  model_evaluation:
+    cmd: uv run src/model/model_evaluation.py
+    deps:
+    - data/interim/test_processed.csv
+    - lgbm_model.pkl
+    - tfidf_vectorizer.pkl
+    outs:
+    - experiment_info.json

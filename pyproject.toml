@@ -16,7 +16,11 @@ dependencies = [
     "pyyaml",
     "numpy",
     "nltk",
-    "lightgbm"
+    "lightgbm",
+    "matplotlib",
+    "seaborn",
+    "boto3",
+    "awscli",
 ]
 
 [tool.setuptools.packages.find]
