@@ -8,3 +8,12 @@ stages:
     outs:
     - data/raw/train.csv
     - data/raw/test.csv
+  
+  data_preprocessing:
+    cmd: uv run src/data/data_preprocessing.py
+    deps: 
+    - data/raw/train.csv
+    - data/raw/test.csv
+    outs:
+    - data/interim/train_processed.csv
+    - data/interim/test_processed.csv
