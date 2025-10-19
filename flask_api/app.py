@@ -10,6 +10,7 @@ import mlflow
 import numpy as np
 import re
 import pandas as pd
+import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from mlflow.tracking import MlflowClient
@@ -21,6 +22,9 @@ from src.config.config import TRACKING_URI
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 # Define the preprocessing function
 def preprocess_comment(comment):
