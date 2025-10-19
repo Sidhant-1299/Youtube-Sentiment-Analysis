@@ -15,7 +15,7 @@ from nltk.stem import WordNetLemmatizer
 from mlflow.tracking import MlflowClient
 import matplotlib.dates as mdates
 import pickle
-
+from collections import defaultdict
 from src.config.config import TRACKING_URI
 
 
@@ -94,6 +94,7 @@ model, vectorizer = load_model_and_vectorizer("yt_chrome_plugin_model", "3", "tf
 def home():
     return "Welcome to our flask api"
 
+latest_data = defaultdict(list)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -106,8 +107,9 @@ def predict():
         return jsonify({"error": "No comments provided"}), 400
 
     try:
+        comments = [comment['text'] for comment in comments]
         # Preprocess each comment before vectorizing
-        preprocessed_comments = [preprocess_comment(comment['text']) for comment in comments]
+        preprocessed_comments = [preprocess_comment(comment) for comment in comments]
         # Transform comments using the vectorizer
         transformed_comments = vectorizer.transform(preprocessed_comments)
         # Convert the sparse matrix to dense format
@@ -119,12 +121,58 @@ def predict():
     except Exception as e:
         return jsonify({"error": f"Prediction failed: {e}"}), 500
     
-    print(f"predictions: {predictions}")
+    # print(f"predictions: {predictions}")
     # Return the response with original comments and predicted sentiments
-    response = [{"comment": comment, "sentiment": sentiment} for comment, sentiment in zip(comments, predictions)]
+    response = []
+    for (prediction, comment) in zip(predictions, comments):
+        latest_data[prediction].append(comment)
+        response.append({"comment": comment, "sentiment":prediction})
+
+    print(response)
+    # response = [{"comment": comment, "sentiment": sentiment} for comment, sentiment in zip(comments, predictions)]
+
     return jsonify(response)
 
 
+@app.route('/generate_chart', methods = ['GET'])
+def generate_chart():
+    map = {'-1':'Negative', '0':'Neutral', '1':'Positive'}
+    volume = {map[k]:len(latest_data[k]) for k in latest_data}
+    labels, sizes = volume.keys(), volume.values()
+
+    colors = ['#36A2EB', "#354460", '#FF6384']  # Blue, Gray, Red
+
+    try:
+        # Generate the pie chart
+        plt.figure(figsize=(6, 6))
+        plt.pie(
+            sizes,
+            labels=labels,
+            colors=colors,
+            autopct='%1.1f%%',
+            startangle=140,
+            textprops={'color': 'w'}
+        )
+        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+        # Save the chart to a BytesIO object
+        img_io = io.BytesIO()
+        plt.savefig(img_io, format='PNG', transparent=True)
+        img_io.seek(0)
+        plt.close()
+
+
+        # Return the image as a response
+        response =  send_file(img_io, mimetype='image/png')
+        latest_data.clear() #so that data does not accumulate
+        return response
+    except Exception as e:
+        app.logger.error(f"Error in /generate_chart: {e}")
+        return jsonify({"error": f"Chart generation failed: {str(e)}"}), 500
+
+    
+
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5555, debug=True)

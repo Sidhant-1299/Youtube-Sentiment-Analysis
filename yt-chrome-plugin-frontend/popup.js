@@ -80,9 +80,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
           </div>`;
 
-        await fetchAndDisplayChart(sentimentCounts);
-        await fetchAndDisplayTrendGraph(sentimentData);
-        await fetchAndDisplayWordCloud(comments.map(c => c.text));
+        // await fetchAndDisplayChart(sentimentCounts);
+        // await fetchAndDisplayTrendGraph(sentimentData);
+        // await fetchAndDisplayWordCloud(comments.map(c => c.text));
 
         outputDiv.innerHTML += `
           <div class="section">
@@ -114,4 +114,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       return null;
     }
   }
+
+  async function fetchSentimentChart() {
+  const chartImg = document.getElementById("sentiment-chart");
+  try {
+    // Use cache busting to avoid browser caching
+    const timestamp = new Date().getTime();
+    chartImg.src = `${API_URL}/generate_chart?ts=${timestamp}`;
+  } catch (e) {
+    console.error("Error fetching chart:", e);
+  }
+}
+
+// Refresh button
+document.getElementById("refresh-chart").addEventListener("click", fetchSentimentChart);
+
 });
