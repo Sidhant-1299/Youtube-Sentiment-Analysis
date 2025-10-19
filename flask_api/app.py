@@ -107,22 +107,19 @@ def predict():
 
     try:
         # Preprocess each comment before vectorizing
-        preprocessed_comments = [preprocess_comment(comment) for comment in comments]
-        
+        preprocessed_comments = [preprocess_comment(comment['text']) for comment in comments]
         # Transform comments using the vectorizer
         transformed_comments = vectorizer.transform(preprocessed_comments)
-
         # Convert the sparse matrix to dense format
         dense_comments = transformed_comments.toarray()  # Convert to dense array
-        
         # Make predictions
         predictions = model.predict(dense_comments).tolist()  # Convert to list
-        
         # Convert predictions to strings for consistency
         predictions = [str(pred) for pred in predictions]
     except Exception as e:
         return jsonify({"error": f"Prediction failed: {e}"}), 500
     
+    print(f"predictions: {predictions}")
     # Return the response with original comments and predicted sentiments
     response = [{"comment": comment, "sentiment": sentiment} for comment, sentiment in zip(comments, predictions)]
     return jsonify(response)
