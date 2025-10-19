@@ -16,6 +16,9 @@ from mlflow.tracking import MlflowClient
 import matplotlib.dates as mdates
 import pickle
 
+from src.config.config import TRACKING_URI
+
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -23,22 +26,15 @@ CORS(app)  # Enable CORS for all routes
 def preprocess_comment(comment):
     """Apply preprocessing transformations to a comment."""
     try:
-        # Convert to lowercase
-        comment = comment.lower()
-
-        # Remove trailing and leading whitespaces
-        comment = comment.strip()
-
+        # Convert to lowercase and remove trailing and leading whitespaces
+        comment = comment.lower().strip()
         # Remove newline characters
-        comment = re.sub(r'\n', ' ', comment)
-
+        comment = comment.replace("\n"," ")
         # Remove non-alphanumeric characters, except punctuation
         comment = re.sub(r'[^A-Za-z0-9\s!?.,]', '', comment)
-
         # Remove stopwords but retain important ones for sentiment analysis
         stop_words = set(stopwords.words('english')) - {'not', 'but', 'however', 'no', 'yet'}
         comment = ' '.join([word for word in comment.split() if word not in stop_words])
-
         # Lemmatize the words
         lemmatizer = WordNetLemmatizer()
         comment = ' '.join([lemmatizer.lemmatize(word) for word in comment.split()])
@@ -53,7 +49,6 @@ def preprocess_comment(comment):
 # Load the model and vectorizer from the model registry and local storage
 def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
     # Set MLflow tracking URI to your server
-    TRACKING_URI = "http://3.19.222.199:5000/"
     mlflow.set_tracking_uri(TRACKING_URI)
     client = MlflowClient()
     model_uri = f"models:/{model_name}/{model_version}"
@@ -67,6 +62,7 @@ def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
         run_id= run_id,
         artifact_path=vectorizer_path
     )
+    # print(f"vectorizer pkl file path: {vectorizer_pkl}")
     with open(vectorizer_pkl, "rb") as f:
         vectorizer = pickle.load(f)
    

@@ -3,8 +3,9 @@ import mlflow
 import logging
 import os
 from src.utils.utils import setup_logger
+from src.config.config import TRACKING_URI
 
-TRACKING_URI = "http://3.19.222.199:5000/"
+
 mlflow.set_tracking_uri(TRACKING_URI)
 
 logger = logging.getLogger(__name__)
