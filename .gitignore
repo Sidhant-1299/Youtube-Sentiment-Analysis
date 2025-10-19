@@ -127,3 +127,5 @@ Thumbs.db
 
 # Env file
 .env
+
+mlruns/
