@@ -15,7 +15,7 @@ from mlflow.models import infer_signature
 from src.utils.utils import setup_logger
 from src.config.config import TRACKING_URI
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 def load_data(file_path: str) -> pd.DataFrame:
     """Load data from a CSV file."""
@@ -113,8 +113,6 @@ def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
 
 
 def main():
-    setup_logger()
-
     mlflow.set_tracking_uri(TRACKING_URI)
     mlflow.set_experiment('dvc-pipeline-runs')
     

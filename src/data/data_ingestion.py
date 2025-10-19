@@ -7,7 +7,8 @@ import os
 from src.utils.utils import setup_logger
 
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
+
 def load_params(params_path: str) -> dict:
     """Load parameters from a YAML file."""
     try:
@@ -79,16 +80,12 @@ def main():
         # Load parameters from the params.yaml in the root directory
         params = load_params(params_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../params.yaml'))
         test_size = params['data_ingestion']['test_size']
-        
         # Load data from the specified URL
         df = load_data(data_url='https://raw.githubusercontent.com/Himanshu-1703/reddit-sentiment-analysis/refs/heads/main/data/reddit.csv')
-        
         # Preprocess the data
         final_df = preprocess_data(df)
-        
         # Split the data into training and testing sets
         train_data, test_data = train_test_split(final_df, test_size=test_size, random_state=42)
-        
         # Save the split datasets and create the raw folder if it doesn't exist
         save_data(train_data, test_data, data_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../data'))
         
@@ -97,5 +94,4 @@ def main():
         print(f"Error: {e}")
 
 if __name__ == '__main__':
-    setup_logger()
     main()

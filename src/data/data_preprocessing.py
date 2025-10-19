@@ -15,28 +15,21 @@ nltk.download('wordnet')
 nltk.download('stopwords')
 
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 # Define the preprocessing function
 def preprocess_comment(comment):
     """Apply preprocessing transformations to a comment."""
     try:
-        # Convert to lowercase
-        comment = comment.lower()
-
-        # Remove trailing and leading whitespaces
-        comment = comment.strip()
-
+        # Convert to lowercase and remove trailing and leading whitespaces  
+        comment = comment.lower().strip()
         # Remove newline characters
-        comment = re.sub(r'\n', ' ', comment)
-
+        comment = comment.replace("\n"," ")
         # Remove non-alphanumeric characters, except punctuation
         comment = re.sub(r'[^A-Za-z0-9\s!?.,]', '', comment)
-
         # Remove stopwords but retain important ones for sentiment analysis
         stop_words = set(stopwords.words('english')) - {'not', 'but', 'however', 'no', 'yet'}
         comment = ' '.join([word for word in comment.split() if word not in stop_words])
-
         # Lemmatize the words
         lemmatizer = WordNetLemmatizer()
         comment = ' '.join([lemmatizer.lemmatize(word) for word in comment.split()])
@@ -75,7 +68,6 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame, data_path: str)
 
 def main():
     try:
-        setup_logger()
         logger.debug("Starting data preprocessing...")
         
         # Fetch the data from data/raw

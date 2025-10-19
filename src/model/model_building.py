@@ -9,7 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from src.utils.utils import setup_logger
 
 # logging configuration
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 
 def load_params(params_path: str) -> dict:
@@ -112,7 +112,6 @@ def get_root_directory() -> str:
 def main():
     try:
 
-        setup_logger()
         # Get root directory and resolve the path for params.yaml
         root_dir = get_root_directory()
 

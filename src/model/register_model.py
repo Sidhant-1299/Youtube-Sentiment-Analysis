@@ -8,7 +8,7 @@ from src.config.config import TRACKING_URI
 
 mlflow.set_tracking_uri(TRACKING_URI)
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 def load_model_info(file_path: str) -> dict:
     """Load the model info from a JSON file"""
@@ -58,5 +58,4 @@ def main():
 
 
 if __name__ == '__main__':
-    setup_logger()
     main()

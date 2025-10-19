@@ -1,10 +1,12 @@
 import logging
 
-def setup_logger():
+def setup_logger(name = __name__, log_file = 'data.log'):
+    logger = logging.getLogger(name)
     logging.basicConfig(
-        filename='data.log',
+        filename=log_file,
         encoding='utf-8',
-        level=logging.INFO,
+        level=logging.DEBUG,
         datefmt='%Y-%m-%d %H:%M:%S',
-        format='%(levelname)s\t%(asctime)s\t%(name)s\t%(message)s\t%(funcName)s'
+        format='%(levelname)s\t%(asctime)s\t%(message)s\t%(funcName)s'
     )
+    return logger
