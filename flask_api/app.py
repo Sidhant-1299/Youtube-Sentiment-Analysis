@@ -5,19 +5,21 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import io
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 import mlflow
-import numpy as np
 import re
-import pandas as pd
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from mlflow.tracking import MlflowClient
-import matplotlib.dates as mdates
 import pickle
 from collections import defaultdict
-from src.config.config import TRACKING_URI
+import os
+
+#make sure trakcing uri is set from env variable
+TRACKING_URI = os.getenv("TRACKING_URI",None)
+if TRACKING_URI is None:
+    raise ValueError("TRACKING_URI environment variable not set")
 
 
 app = Flask(__name__)
@@ -88,7 +90,7 @@ def load_model(model_path, vectorizer_path):
         raise
 
 
-# Initialize the model and vectorizer
+# Initialize the model and vectorizer locally
 model, vectorizer = load_model("./lgbm_model.pkl", "./tfidf_vectorizer.pkl")  
 
 # Initialize the model and vectorizer

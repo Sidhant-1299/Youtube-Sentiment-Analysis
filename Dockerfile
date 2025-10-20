@@ -1,7 +1,8 @@
 FROM python:3.12-slim-bookworm
 
 WORKDIR /app
-COPY . .
+COPY flask_api/ .
+COPY *.pkl .
 
 RUN pip install --no-cache-dir uv &&\
     uv venv &&\
