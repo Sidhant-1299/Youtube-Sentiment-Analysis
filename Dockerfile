@@ -3,10 +3,9 @@ FROM python:3.12-slim-bookworm
 WORKDIR /app
 COPY flask_api/ .
 COPY *.pkl .
+COPY flask-requirements.txt .
 
-RUN pip install --no-cache-dir uv &&\
-    uv venv &&\
-    uv pip install . --no-cache
+RUN pip install --no-cache-dir -r flask-requirements.txt
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -14,4 +13,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libomp-dev \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["uv", "run", "flask_api/app.py"]
+CMD ["python", "flask_api/app.py"]
