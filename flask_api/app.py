@@ -6,12 +6,12 @@ from flask_cors import CORS
 import io
 import matplotlib.pyplot as plt
 # from wordcloud import WordCloud
-import mlflow
+# import mlflow
 import re
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-from mlflow.tracking import MlflowClient
+# from mlflow.tracking import MlflowClient
 import pickle
 from collections import defaultdict
 import os
@@ -53,26 +53,26 @@ def preprocess_comment(comment):
 
 
 # Load the model and vectorizer from the model registry and local storage
-def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
-    # Set MLflow tracking URI to your server
-    mlflow.set_tracking_uri(TRACKING_URI)
-    client = MlflowClient()
-    model_uri = f"models:/{model_name}/{model_version}"
-    model = mlflow.pyfunc.load_model(model_uri).get_raw_model()
+# def load_model_and_vectorizer(model_name, model_version, vectorizer_path):
+#     # Set MLflow tracking URI to your server
+#     mlflow.set_tracking_uri(TRACKING_URI)
+#     client = MlflowClient()
+#     model_uri = f"models:/{model_name}/{model_version}"
+#     model = mlflow.pyfunc.load_model(model_uri).get_raw_model()
 
-    #get run_id for the vectorizer artifact
-    model_info = client.get_registered_model(model_name)
-    run_id = model_info.latest_versions[-1].run_id
+#     #get run_id for the vectorizer artifact
+#     model_info = client.get_registered_model(model_name)
+#     run_id = model_info.latest_versions[-1].run_id
 
-    vectorizer_pkl = mlflow.artifacts.download_artifacts(
-        run_id= run_id,
-        artifact_path=vectorizer_path
-    )
-    # print(f"vectorizer pkl file path: {vectorizer_pkl}")
-    with open(vectorizer_pkl, "rb") as f:
-        vectorizer = pickle.load(f)
+#     vectorizer_pkl = mlflow.artifacts.download_artifacts(
+#         run_id= run_id,
+#         artifact_path=vectorizer_path
+#     )
+#     # print(f"vectorizer pkl file path: {vectorizer_pkl}")
+#     with open(vectorizer_pkl, "rb") as f:
+#         vectorizer = pickle.load(f)
    
-    return model, vectorizer
+#     return model, vectorizer
 
 
 
