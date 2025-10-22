@@ -121,8 +121,8 @@ __pypackages__/
 .DS_Store
 Thumbs.db
 
-/lgbm_model.pkl
-/tfidf_vectorizer.pkl
+# /lgbm_model.pkl
+# /tfidf_vectorizer.pkl
 /experiment_info.json
 
 # Env file
