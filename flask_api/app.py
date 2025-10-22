@@ -17,9 +17,9 @@ from collections import defaultdict
 import os
 
 #make sure trakcing uri is set from env variable
-TRACKING_URI = os.getenv("TRACKING_URI",None)
-if TRACKING_URI is None:
-    raise ValueError("TRACKING_URI environment variable not set")
+# TRACKING_URI = os.getenv("TRACKING_URI",None)
+# if TRACKING_URI is None:
+#     raise ValueError("TRACKING_URI environment variable not set")
 
 
 app = Flask(__name__)
