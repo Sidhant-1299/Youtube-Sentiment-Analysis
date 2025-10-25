@@ -14,7 +14,6 @@ from nltk.stem import WordNetLemmatizer
 # from mlflow.tracking import MlflowClient
 import pickle
 from collections import defaultdict
-import os
 
 #make sure trakcing uri is set from env variable
 # TRACKING_URI = os.getenv("TRACKING_URI",None)
