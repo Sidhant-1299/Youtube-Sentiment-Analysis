@@ -18,4 +18,9 @@ docker run -p 5555:5555 yt-sentiment-analysis
 1. Go to chrome:://extenstions
 2. Turn on Developer mode
 3. Find Youtube-Sentiment-Analysis/yt-chrome-plugin-frontend and load it as extension
-   
+
+
+
+## Tutorial 
+https://github.com/user-attachments/assets/cbcc8904-4069-4d1b-8a80-892778fb189f
+
