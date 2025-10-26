@@ -26,3 +26,6 @@ docker run -p 5555:5555 yt-sentiment-analysis
 ## Tutorial 
 https://github.com/user-attachments/assets/cbcc8904-4069-4d1b-8a80-892778fb189f
 
+
+## License
+This project is open-sourced under the MIT License
