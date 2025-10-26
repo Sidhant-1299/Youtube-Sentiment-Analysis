@@ -7,7 +7,8 @@ The extension fetches visible comments, sends them to the backend API for predic
 
 #### Flask Server API
 
-** To build the docker image **
+**To build the docker image:**
+
 ```
 git clone https://github.com/Sidhant-1299/Youtube-Sentiment-Analysis/
 cd Youtube-Sentiment-Analysis
