@@ -1,5 +1,7 @@
 # Youtube-Sentiment-Analysis
 
+A Chrome Extension powered by a Dockerized Flask backend and a LightGBM model that performs real-time sentiment analysis on YouTube comments.
+The extension fetches visible comments, sends them to the backend API for prediction, and displays an interactive pie chart and sentiment score directly on the YouTube page.
 
 ## Usage
 
